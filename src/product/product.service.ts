@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { ProductDto } from './dto/product.dto';
+import { CreateProductDto } from './dto/product.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject('PRODUCT_MODEL')
-    private productModel: Model<ProductDto>,
+    private productModel: Model<CreateProductDto>,
   ) {}
 
-  async getProducts(): Promise<ProductDto[]> {
+  async getProducts(): Promise<CreateProductDto[]> {
     return await this.productModel.find({});
   }
 }

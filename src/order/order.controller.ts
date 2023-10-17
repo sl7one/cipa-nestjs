@@ -6,7 +6,6 @@ import {
   Delete,
   Body,
   Patch,
-  // Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/order.dto';
@@ -37,7 +36,6 @@ export class OrderController {
 
   @Delete(':id')
   deleteOrder(@Param('id') id: string) {
-    console.log(id);
     return this.orderService.deleteOrder(id);
   }
 }

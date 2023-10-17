@@ -1,13 +1,25 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateOrderDto } from './dto/order.dto';
+import { CreateClientDto } from 'src/client/dto/client.dto';
+import { CreateProductDto } from 'src/product/dto/product.dto';
+import { CreateLocationDto } from 'src/location/dto/location.dto';
 
 @Injectable()
 export class OrderService {
   constructor(
     @Inject('ORDER_MODEL')
     private orderModel: Model<CreateOrderDto>,
+
+    @Inject('CLIENT_MODEL')
+    private clientModel: Model<CreateClientDto>,
+
+    @Inject('PRODUCT_MODEL')
+    private productModel: Model<CreateProductDto>,
+
+    @Inject('LOCATION_MODEL')
+    private locationModel: Model<CreateLocationDto>,
   ) {}
 
   async getOrders(): Promise<CreateOrderDto[]> {
@@ -19,19 +31,46 @@ export class OrderService {
   }
 
   async createOrder(obj: CreateOrderDto) {
-    const { order, ...rest } = obj;
-    const totalByProduct = order.map((el) => ({
+    const { order, client, location, ...rest } = obj;
+
+    const productsIds = order.map(({ product }) => product);
+
+    const productsArr = await this.productModel.find({
+      _id: { $in: productsIds },
+    });
+
+    if (!productsArr) {
+      throw new HttpException('Продукты не найдены', HttpStatus.NOT_FOUND);
+    }
+
+    const ordersArray = productsArr.map((el) => ({
       ...el,
-      total: el.order * el.price,
+      total:
+        order.find((item) => item.product === el._id).order *
+        order.find((item) => item.product === el._id).price,
     }));
-    const totalByOrders = totalByProduct.reduce(
+
+    const totalByOrdersArr = ordersArray.reduce(
       (acc, { total }) => (acc += total),
       0,
     );
+
+    const clientObj = await this.clientModel.find({ _id: client._id });
+    if (!clientObj) {
+      throw new HttpException('Клиент не найден', HttpStatus.NOT_FOUND);
+    }
+
+    const locationObj = await this.locationModel.find({ _id: location._id });
+    if (!locationObj) {
+      throw new HttpException('Локация не найдена', HttpStatus.NOT_FOUND);
+    }
+
     return await this.orderModel.create({
       ...rest,
-      order: totalByProduct,
-      total: totalByOrders,
+      order: ordersArray,
+      total: totalByOrdersArr,
+      client: clientObj,
+      location: locationObj,
     });
   }
 

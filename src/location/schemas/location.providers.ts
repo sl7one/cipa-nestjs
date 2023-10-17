@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Connection } from 'mongoose';
-import { OrderSchema } from './order.schema';
+import { LocationSchema } from './location.schema';
 
-export const catsProviders = [
+export const locationsProviders = [
   {
-    provide: 'ORDER_MODEL',
+    provide: 'LOCATION_MODEL',
     useFactory: (connection: Connection) =>
-      connection.model('Order', OrderSchema),
+      connection.model('Location', LocationSchema),
     inject: ['DATABASE_CONNECTION'],
   },
 ];

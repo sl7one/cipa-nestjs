@@ -8,6 +8,7 @@ export const OrderSchema = new mongoose.Schema(
       required: true,
     },
     client: {
+      _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Client' },
       name: {
         type: String,
         lowercase: true,
@@ -21,15 +22,18 @@ export const OrderSchema = new mongoose.Schema(
         maxlength: 13,
         required: true,
       },
-      location: String,
-      message: String,
     },
     order: {
       type: [
         {
           product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            title: String,
+            img: String,
+            id: String,
+            category: String,
+            subCategory: String,
+            subCategory2: String,
+            _id: mongoose.Schema.Types.ObjectId,
           },
           price: { type: Number, min: 0, required: true },
           order: { type: Number, min: 0, required: true },
@@ -51,6 +55,9 @@ export const OrderSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    location: { type: String },
+    message: { type: String },
 
     total: {
       type: Number,

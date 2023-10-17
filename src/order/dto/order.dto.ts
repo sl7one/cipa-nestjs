@@ -12,46 +12,15 @@ import {
   IsOptional,
   IsArray,
 } from 'class-validator';
-
-class ClientDto {
-  @Length(2, 100)
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @Length(9, 13)
-  @IsNotEmpty()
-  @IsString()
-  phone: string;
-
-  @IsString()
-  @IsOptional()
-  location: string;
-
-  @IsString()
-  @IsOptional()
-  message: string;
-}
-
-// class OrderNestedDto {
-//   @Min(0)
-//   price: number;
-
-//   @Min(0)
-//   @IsInt()
-//   order: number;
-
-//   @Length(2, 100)
-//   @IsNotEmpty()
-//   @IsString()
-//   category: string;
-// }
+import { Types } from 'mongoose';
+import { CreateClientDto } from 'src/client/dto/client.dto';
+import { CreateLocationDto } from 'src/location/dto/location.dto';
 
 class OrderDto {
   @Length(2, 100)
   @IsNotEmpty()
   @IsString()
-  product: string;
+  product: Types.ObjectId;
 
   @Min(0)
   @IsInt()
@@ -85,8 +54,8 @@ export class CreateOrderDto {
   date: Date;
 
   @ValidateNested()
-  @Type(() => ClientDto)
-  client: ClientDto;
+  @Type(() => CreateClientDto)
+  client: CreateClientDto;
 
   @IsNotEmpty()
   @IsArray()
@@ -97,4 +66,14 @@ export class CreateOrderDto {
   @IsBoolean()
   @IsOptional()
   isActive: boolean;
+
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => CreateLocationDto)
+  location: CreateLocationDto;
+
+  @IsString()
+  @Length(2, 300)
+  @IsOptional()
+  message: string;
 }

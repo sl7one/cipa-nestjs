@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Mongoose } from 'mongoose';
-import { OrderSchema } from './schemas/order.schema';
+import { OrderSchema } from './order.schema';
 
 export const ordersProviders = [
   {

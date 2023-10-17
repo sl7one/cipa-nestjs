@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
-export class ProductDto {
+export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   title: string;
