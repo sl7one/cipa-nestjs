@@ -7,9 +7,9 @@ export const ClientSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      required: true,
-      minLength: 2,
+      minLength: 3,
       maxlength: 100,
+      required: true,
     },
     phone: {
       type: String,

@@ -56,7 +56,7 @@ export const OrderSchema = new mongoose.Schema(
       default: true,
     },
 
-    location: { type: String, minLength: 3, maxlength: 100 },
+    location: { type: mongoose.SchemaTypes.ObjectId, ref: 'Location' },
     message: { type: String, minLength: 3, maxlength: 300 },
 
     total: {

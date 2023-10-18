@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateClientDto } from './dto/client.dto';
 
@@ -15,6 +15,18 @@ export class ClientService {
   }
 
   async createClient(client: CreateClientDto) {
-    return await this.orderModel.create(client);
+    try {
+      const data = await this.orderModel.create(client);
+      return data;
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
