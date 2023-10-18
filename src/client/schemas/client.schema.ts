@@ -14,19 +14,10 @@ export const ClientSchema = new mongoose.Schema(
     phone: {
       type: String,
       match: /^(\+380\d{9})$/,
-      minLength: 9,
+      minLength: 13,
       maxlength: 13,
       required: true,
-    },
-    location: {
-      type: String,
-      minLength: 2,
-      maxlength: 100,
-    },
-    message: {
-      type: String,
-      minLength: 2,
-      maxlength: 300,
+      unique: true,
     },
   },
   { versionKey: false },

@@ -56,8 +56,8 @@ export const OrderSchema = new mongoose.Schema(
       default: true,
     },
 
-    location: { type: String },
-    message: { type: String },
+    location: { type: String, minLength: 3, maxlength: 100 },
+    message: { type: String, minLength: 3, maxlength: 300 },
 
     total: {
       type: Number,

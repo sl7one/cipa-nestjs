@@ -1,17 +1,24 @@
 /* eslint-disable prettier/prettier */
-import { Length, IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  Length,
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateClientDto {
   @IsOptional()
   _id: string;
 
-  @Length(2, 100)
+  @Length(3, 100)
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @Length(13)
-  @IsNotEmpty()
+  @MinLength(13)
+  @MaxLength(13)
   @IsString()
   phone: string;
 }
