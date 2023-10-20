@@ -3,20 +3,22 @@ import * as mongoose from 'mongoose';
 
 const fullOrder = new mongoose.Schema({
   product: {
-    title: { type: String, minlength: 3, required: true },
-    img: { type: String, minlength: 3, required: true },
-    id: { type: String, minlength: 3, required: true },
-    category: { type: String, minlength: 3, required: true },
-    subCategory: { type: String, minlength: 3, required: false },
-    subCategory2: { type: String, minlength: 3, required: false },
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
+    type: {
+      title: { type: String, minlength: 3 },
+      img: { type: String, minlength: 3 },
+      id: { type: String, minlength: 3 },
+      category: { type: String, minlength: 3 },
+      subCategory: { type: String, minlength: 3, required: false },
+      subCategory2: { type: String, minlength: 3, required: false },
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
     },
   },
-  price: { type: Number, min: 0, required: true },
-  order: { type: Number, min: 0, required: true },
-  total: { type: Number, min: 0, required: true },
+  price: { type: Number, min: 0 },
+  order: { type: Number, min: 0 },
+  total: { type: Number, min: 0 },
 });
 
 export const OrderSchema = new mongoose.Schema(
