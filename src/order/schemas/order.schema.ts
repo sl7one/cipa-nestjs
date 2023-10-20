@@ -1,54 +1,53 @@
 /* eslint-disable prettier/prettier */
 import * as mongoose from 'mongoose';
 
+const fullOrder = new mongoose.Schema({
+  product: {
+    title: { type: String, minlength: 3, required: true },
+    img: { type: String, minlength: 3, required: true },
+    id: { type: String, minlength: 3, required: true },
+    category: { type: String, minlength: 3, required: true },
+    subCategory: { type: String, minlength: 3, required: false },
+    subCategory2: { type: String, minlength: 3, required: false },
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  },
+  price: { type: Number, min: 0, required: true },
+  order: { type: Number, min: 0, required: true },
+  total: { type: Number, min: 0, required: true },
+});
+
 export const OrderSchema = new mongoose.Schema(
   {
     date: {
       type: Date,
-      required: true,
     },
     client: {
-      _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Client' },
-      name: {
-        type: String,
-        lowercase: true,
-        trim: true,
-        required: true,
-      },
-      phone: {
-        type: String,
-        match: /^(\+380\d{9})$/,
-        minLength: 9,
-        maxlength: 13,
-        required: true,
+      type: {
+        name: {
+          type: String,
+          lowercase: true,
+          trim: true,
+          minlength: 3,
+          maxlength: 100,
+          required: true,
+        },
+        phone: {
+          type: String,
+          match: /^(\+380\d{9})$/,
+          minLength: 13,
+          maxlength: 13,
+          required: true,
+        },
+        _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Client' },
       },
     },
     order: {
-      type: [
-        {
-          product: {
-            title: String,
-            img: String,
-            id: String,
-            category: String,
-            subCategory: String,
-            subCategory2: String,
-            _id: mongoose.Schema.Types.ObjectId,
-          },
-          price: { type: Number, min: 0, required: true },
-          order: { type: Number, min: 0, required: true },
-          total: {
-            type: Number,
-          },
-        },
-      ],
+      type: [fullOrder],
       required: true,
-      validate: {
-        validator: function (array) {
-          return array.length > 0;
-        },
-        message: 'Массив "order" должен содержать как минимум 1 элемент.',
-      },
+      minlength: 1,
     },
 
     isActive: {
@@ -56,8 +55,19 @@ export const OrderSchema = new mongoose.Schema(
       default: true,
     },
 
-    location: { type: mongoose.SchemaTypes.ObjectId, ref: 'Location' },
-    message: { type: String, minLength: 3, maxlength: 300 },
+    location: {
+      type: {
+        _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Location' },
+        location: { type: String, minlength: 3, maxlength: 100 },
+      },
+      required: false,
+    },
+    message: {
+      type: String,
+      minLength: 3,
+      maxlength: 300,
+      required: false,
+    },
 
     total: {
       type: Number,

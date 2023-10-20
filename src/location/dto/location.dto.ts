@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { IsString, Length, IsOptional } from 'class-validator';
-import { Types } from 'mongoose';
+import { IsString, Length } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateLocationDto {
-  _id: Types.ObjectId;
-
+  @ApiProperty({
+    description: 'location',
+    minimum: 3,
+    maximum: 100,
+  })
   @IsString()
-  @Length(2, 100)
-  @IsOptional()
+  @Length(3, 100)
   location: string;
 }

@@ -3,7 +3,6 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
-  Length,
   ValidateNested,
   Min,
   IsInt,
@@ -11,16 +10,14 @@ import {
   IsNotEmpty,
   IsOptional,
   IsArray,
+  IsMongoId,
 } from 'class-validator';
-import { Types } from 'mongoose';
-import { CreateClientDto } from 'src/client/dto/client.dto';
-import { CreateLocationDto } from 'src/location/dto/location.dto';
+import mongoose from 'mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 
 class OrderDto {
-  @Length(2, 100)
-  @IsNotEmpty()
-  @IsString()
-  product: Types.ObjectId;
+  @IsMongoId()
+  _id: mongoose.Schema.Types.ObjectId;
 
   @Min(0)
   @IsInt()
@@ -29,51 +26,48 @@ class OrderDto {
   @Min(0)
   @IsInt()
   order: number;
-
-  @Length(2, 100)
-  @IsNotEmpty()
-  @IsString()
-  @IsOptional()
-  category: string;
-
-  @Length(2, 100)
-  @IsNotEmpty()
-  @IsString()
-  @IsOptional()
-  subCategory: string;
-
-  @Length(2, 100)
-  @IsNotEmpty()
-  @IsString()
-  @IsOptional()
-  subCategory2: string;
 }
 
 export class CreateOrderDto {
+  @ApiProperty({
+    description: 'date. format ISO',
+  })
   @IsDateString()
   date: Date;
 
-  @ValidateNested()
-  @Type(() => CreateClientDto)
-  client: CreateClientDto;
+  @ApiProperty({
+    description: 'client ID',
+  })
+  @IsMongoId()
+  client: mongoose.Schema.Types.ObjectId;
 
+  @ApiProperty({
+    description: 'orders array',
+    type: [OrderDto],
+  })
   @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrderDto)
   order: OrderDto[];
 
+  @ApiProperty({
+    description: 'optional',
+  })
   @IsBoolean()
   @IsOptional()
   isActive: boolean;
 
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => CreateLocationDto)
-  location: CreateLocationDto;
+  @ApiProperty({
+    description: 'location ID',
+  })
+  @IsMongoId()
+  location: mongoose.Schema.Types.ObjectId;
 
+  @ApiProperty({
+    description: 'message, optional',
+  })
   @IsString()
-  @Length(2, 300)
   @IsOptional()
   message: string;
 }

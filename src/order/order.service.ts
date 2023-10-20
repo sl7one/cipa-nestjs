@@ -31,9 +31,9 @@ export class OrderService {
   }
 
   async createOrder(obj: CreateOrderDto) {
-    const { order, client, location, ...rest } = obj;
+    const { order, client: client_id, location: location_id, ...rest } = obj;
 
-    const productsIds = order.map(({ product }) => product);
+    const productsIds = order.map(({ _id }) => _id);
 
     const productsArr = await this.productModel.find({
       _id: { $in: productsIds },
@@ -43,34 +43,50 @@ export class OrderService {
       throw new HttpException('Продукты не найдены', HttpStatus.NOT_FOUND);
     }
 
-    const ordersArray = productsArr.map((el) => ({
-      ...el,
-      total:
-        order.find((item) => item.product === el._id).order *
-        order.find((item) => item.product === el._id).price,
-    }));
+    const ordersArray = productsArr.map(({ _id, ...rest }) => {
+      return {
+        _id,
+        ...rest,
+        total:
+          order.find((item) => item._id.toString() === _id.toString()).order *
+          order.find((item) => item._id.toString() === _id.toString()).price,
+      };
+    });
 
     const totalByOrdersArr = ordersArray.reduce(
       (acc, { total }) => (acc += total),
       0,
     );
 
-    const clientObj = await this.clientModel.find({ _id: client._id });
-    if (!clientObj) {
+    const clientArr = await this.clientModel.find({ _id: client_id });
+    if (!clientArr || !clientArr.length) {
       throw new HttpException('Клиент не найден', HttpStatus.NOT_FOUND);
     }
+    const [clientData] = clientArr;
 
-    const locationObj = await this.locationModel.find({ _id: location._id });
-    if (!locationObj) {
+    const locationArr = await this.locationModel.find({ _id: location_id });
+    if (!locationArr || !locationArr.length) {
       throw new HttpException('Локация не найдена', HttpStatus.NOT_FOUND);
     }
+
+    const [locationData] = locationArr;
+
+    // console.log(ordersArray);
+
+    console.log({
+      ...rest,
+      order: ordersArray,
+      total: totalByOrdersArr,
+      client: clientData,
+      location: locationData,
+    });
 
     return await this.orderModel.create({
       ...rest,
       order: ordersArray,
       total: totalByOrdersArr,
-      client: clientObj,
-      location: locationObj,
+      client: clientData,
+      location: locationData,
     });
   }
 
