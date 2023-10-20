@@ -29,4 +29,21 @@ export class ClientService {
       );
     }
   }
+
+  async updateClient(client: CreateClientDto) {
+    try {
+      const { _id, ...rest } = client;
+      const data = await this.orderModel.findOneAndUpdate({ _id }, rest);
+      return data;
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

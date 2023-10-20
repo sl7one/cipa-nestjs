@@ -5,6 +5,7 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { CreateClientDto } from './dto/client.dto';
 import { ClientService } from './client.service';
@@ -30,5 +31,10 @@ export class ClientController {
         HttpStatus.BAD_REQUEST,
       );
     return this.clientService.createClient(dto);
+  }
+
+  @Patch()
+  updateClient(@Body() dto: CreateClientDto) {
+    return this.clientService.updateClient(dto);
   }
 }

@@ -5,15 +5,10 @@ const fullOrder = new mongoose.Schema({
   product: {
     type: {
       title: { type: String, minlength: 3 },
-      img: { type: String, minlength: 3 },
-      id: { type: String, minlength: 3 },
+      img: { type: String },
       category: { type: String, minlength: 3 },
       subCategory: { type: String, minlength: 3, required: false },
       subCategory2: { type: String, minlength: 3, required: false },
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-      },
     },
   },
   price: { type: Number, min: 0 },
@@ -26,6 +21,7 @@ export const OrderSchema = new mongoose.Schema(
     date: {
       type: Date,
     },
+
     client: {
       type: {
         name: {
@@ -43,9 +39,9 @@ export const OrderSchema = new mongoose.Schema(
           maxlength: 13,
           required: true,
         },
-        _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Client' },
       },
     },
+
     order: {
       type: [fullOrder],
       required: true,
@@ -58,16 +54,12 @@ export const OrderSchema = new mongoose.Schema(
     },
 
     location: {
-      type: {
-        _id: { type: mongoose.SchemaTypes.ObjectId, ref: 'Location' },
-        location: { type: String, minlength: 3, maxlength: 100 },
-      },
+      type: String,
       required: false,
     },
+
     message: {
       type: String,
-      minLength: 3,
-      maxlength: 300,
       required: false,
     },
 

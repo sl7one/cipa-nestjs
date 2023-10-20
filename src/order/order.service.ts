@@ -53,6 +53,8 @@ export class OrderService {
       };
     });
 
+    console.log(ordersArray);
+
     const totalByOrdersArr = ordersArray.reduce(
       (acc, { total }) => (acc += total),
       0,
@@ -64,21 +66,8 @@ export class OrderService {
     }
     const [clientData] = clientArr;
 
-    const locationArr = await this.locationModel.find({ _id: location_id });
-    if (!locationArr || !locationArr.length) {
-      throw new HttpException('Локация не найдена', HttpStatus.NOT_FOUND);
-    }
-
-    const [locationData] = locationArr;
-
-    // console.log(ordersArray);
-
-    console.log({
-      ...rest,
-      order: ordersArray,
-      total: totalByOrdersArr,
-      client: clientData,
-      location: locationData,
+    const [location] = await this.locationModel.find({
+      _id: location_id,
     });
 
     return await this.orderModel.create({
@@ -86,7 +75,7 @@ export class OrderService {
       order: ordersArray,
       total: totalByOrdersArr,
       client: clientData,
-      location: locationData,
+      location: location ? location.location : '',
     });
   }
 
