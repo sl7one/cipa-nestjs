@@ -47,6 +47,10 @@ export class OrderService {
       return {
         _id,
         ...rest,
+        price: order.find((item) => item._id.toString() === _id.toString())
+          .price,
+        quantity: order.find((item) => item._id.toString() === _id.toString())
+          .order,
         total:
           order.find((item) => item._id.toString() === _id.toString()).order *
           order.find((item) => item._id.toString() === _id.toString()).price,
@@ -70,13 +74,15 @@ export class OrderService {
       _id: location_id,
     });
 
-    return await this.orderModel.create({
+    const res = await this.orderModel.create({
       ...rest,
       order: ordersArray,
       total: totalByOrdersArr,
       client: clientData,
       location: location ? location.location : '',
     });
+
+    return res;
   }
 
   async deleteOrder(id: string) {

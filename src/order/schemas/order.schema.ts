@@ -2,17 +2,14 @@
 import * as mongoose from 'mongoose';
 
 const fullOrder = new mongoose.Schema({
-  product: {
-    type: {
-      title: { type: String, minlength: 3 },
-      img: { type: String },
-      category: { type: String, minlength: 3 },
-      subCategory: { type: String, minlength: 3, required: false },
-      subCategory2: { type: String, minlength: 3, required: false },
-    },
-  },
+  title: { type: String, minlength: 3 },
+  img: { type: String },
+  category: { type: String, minlength: 3 },
+  subCategory: { type: String, minlength: 3, required: false },
+  subCategory2: { type: String, minlength: 3, required: false },
+
   price: { type: Number, min: 0 },
-  order: { type: Number, min: 0 },
+  quantity: { type: Number, min: 0 },
   total: { type: Number, min: 0 },
 });
 
