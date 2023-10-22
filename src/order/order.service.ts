@@ -57,8 +57,6 @@ export class OrderService {
       };
     });
 
-    console.log(ordersArray);
-
     const totalByOrdersArr = ordersArray.reduce(
       (acc, { total }) => (acc += total),
       0,

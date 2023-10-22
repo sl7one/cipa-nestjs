@@ -41,7 +41,6 @@ export const OrderSchema = new mongoose.Schema(
 
     order: {
       type: [fullOrder],
-      required: true,
       minlength: 1,
     },
 
