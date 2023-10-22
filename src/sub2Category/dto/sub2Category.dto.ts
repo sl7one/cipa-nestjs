@@ -2,13 +2,13 @@
 import { IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateSubCategory2Dto {
+export class CreateSub2CategoryDto {
   @ApiProperty({
-    description: 'subCategory2',
+    description: 'sub2Category',
     minimum: 3,
     maximum: 30,
   })
   @IsString()
   @Length(3, 30)
-  subCategory2: string;
+  name: string;
 }

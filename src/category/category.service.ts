@@ -14,7 +14,7 @@ export class CategoryService {
     return await this.categoriesModel.find({});
   }
 
-  async addNewCatgery(body: CreateCategoryDto) {
+  async addNewCategory(body: CreateCategoryDto) {
     try {
       const data = await this.categoriesModel.create(body);
       return data;

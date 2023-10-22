@@ -5,7 +5,7 @@ import { LocationModule } from './location/location.module';
 import { ClientsModule } from './client/client.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './subCategory/subCategory.module';
-import { SubCategory2Module } from './subCategory2/subCategory2.module';
+import { Sub2CategoryModule } from './sub2Category/sub2Category.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { SubCategory2Module } from './subCategory2/subCategory2.module';
     ClientsModule,
     CategoryModule,
     SubCategoryModule,
-    SubCategory2Module,
+    Sub2CategoryModule,
   ],
 })
 export class AppModule {}

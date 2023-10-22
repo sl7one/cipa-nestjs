@@ -21,6 +21,10 @@ export const ProductSchema = new mongoose.Schema(
       trim: true,
       required: false,
     },
+    price: {
+      type: Number,
+      min: 0,
+    },
   },
   { versionKey: false, timestamps: false },
 );

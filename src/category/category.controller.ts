@@ -30,6 +30,6 @@ export class CategoryController {
         },
         HttpStatus.BAD_REQUEST,
       );
-    return this.categoriesService.addNewCatgery(dto);
+    return this.categoriesService.addNewCategory(dto);
   }
 }

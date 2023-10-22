@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import * as mongoose from 'mongoose';
 
-export const CategorySchema = new mongoose.Schema(
+export const Sub2CategorySchema = new mongoose.Schema(
   {
     name: {
       type: String,

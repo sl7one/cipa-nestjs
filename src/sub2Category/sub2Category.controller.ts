@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { Controller, Get } from '@nestjs/common';
-import { SubCategory2Service } from './subCategory2.service';
-import { CreateSubCategory2Dto } from './dto/subCategory2.dto';
+import { Sub2CategoryService } from './sub2Category.service';
+import { CreateSub2CategoryDto } from './dto/sub2Category.dto';
 
-@Controller('sub2-categories')
-export class SubCategory2Controller {
-  constructor(private readonly subCategory2Service: SubCategory2Service) {}
+@Controller('sub-2-categories')
+export class Sub2CategoryController {
+  constructor(private readonly sub2CategoryService: Sub2CategoryService) {}
 
   @Get()
-  getSubCategory(): Promise<CreateSubCategory2Dto[]> {
-    return this.subCategory2Service.getSubCategory2();
+  getSub2Category(): Promise<CreateSub2CategoryDto[]> {
+    return this.sub2CategoryService.getSub2Category();
   }
 
   // @Post()

@@ -1,41 +1,51 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, Min, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
   @ApiProperty({
-    description: 'product',
-    minimum: 13,
-    maximum: 13,
+    description: 'product-title',
+    minimum: 3,
+    maximum: 30,
   })
+  @Length(3, 30)
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'URL img',
+  })
   @IsString()
+  @IsOptional()
   img: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  id: string;
-
-  @ApiProperty()
+  @ApiProperty({
+    description: 'category MongoID',
+  })
   @IsNotEmpty()
   @IsString()
   category: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'subCategory MongoID',
+  })
   @IsNotEmpty()
   @IsString()
   @IsOptional()
   subCategory: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'sub2Category MongoID',
+  })
   @IsString()
   @IsOptional()
-  subCategory2: string;
+  sub2Category: string;
+
+  @ApiProperty({
+    description: 'price',
+    minimum: 0,
+  })
+  @Min(0)
+  price: number;
 }

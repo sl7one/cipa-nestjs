@@ -10,5 +10,5 @@ export class CreateSubCategoryDto {
   })
   @IsString()
   @Length(3, 30)
-  subCategory: string;
+  name: string;
 }

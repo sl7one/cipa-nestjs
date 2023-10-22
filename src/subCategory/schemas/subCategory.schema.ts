@@ -1,11 +1,15 @@
 /* eslint-disable prettier/prettier */
 import * as mongoose from 'mongoose';
-import { categoryShema } from '../../category/schemas/category.schema';
 
 export const SubCategorySchema = new mongoose.Schema(
   {
-    subCategory: {
-      type: [categoryShema],
+    name: {
+      type: String,
+      minlength: 3,
+      maxLength: 30,
+      lowercase: true,
+      trim: true,
+      unique: true,
     },
   },
   { versionKey: false, timestamps: false },
