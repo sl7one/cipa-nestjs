@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsOptional, Min, Length } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
@@ -30,7 +30,6 @@ export class CreateProductDto {
   @ApiProperty({
     description: 'subCategory MongoID',
   })
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   subCategory: string;
@@ -44,8 +43,7 @@ export class CreateProductDto {
 
   @ApiProperty({
     description: 'price',
-    minimum: 0,
   })
-  @Min(0)
+  @IsOptional()
   price: number;
 }

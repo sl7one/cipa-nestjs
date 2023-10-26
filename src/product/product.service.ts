@@ -53,12 +53,12 @@ export class ProductService {
       categories.sub2Category = sub2CategoryData.name;
     }
 
-    const result = await this.productModel.findByIdAndUpdate(
-      { _id },
-      { ...categories, ...rest },
-    );
-
-    console.log(result);
-    return;
+    const result: CreateProductDto[] =
+      await this.productModel.findByIdAndUpdate(
+        { _id },
+        { ...categories, ...rest },
+        { returnDocument: 'after' },
+      );
+    return result;
   }
 }
