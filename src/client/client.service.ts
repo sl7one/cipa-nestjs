@@ -46,4 +46,20 @@ export class ClientService {
       );
     }
   }
+
+  async deleteClient(id: string) {
+    try {
+      const data = await this.orderModel.findByIdAndDelete(id);
+      return data;
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

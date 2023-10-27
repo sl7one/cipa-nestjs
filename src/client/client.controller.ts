@@ -6,6 +6,8 @@ import {
   HttpException,
   HttpStatus,
   Patch,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { CreateClientDto } from './dto/client.dto';
 import { ClientService } from './client.service';
@@ -36,5 +38,10 @@ export class ClientController {
   @Patch()
   updateClient(@Body() dto: CreateClientDto) {
     return this.clientService.updateClient(dto);
+  }
+
+  @Delete(':id')
+  deleteClient(@Param('id') id: string) {
+    return this.clientService.deleteClient(id);
   }
 }
