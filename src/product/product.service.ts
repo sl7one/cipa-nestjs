@@ -35,7 +35,7 @@ export class ProductService {
     const categories = { category: '', subCategory: '', sub2Category: '' };
     const [categoryData] = await this.categoryModel.find({ _id: category });
     if (!categoryData) {
-      throw new HttpException('Продукты не найдены', HttpStatus.NOT_FOUND);
+      throw new HttpException('Категория не найдена', HttpStatus.NOT_FOUND);
     }
     categories.category = categoryData.name;
 
@@ -59,6 +59,7 @@ export class ProductService {
         { ...categories, ...rest },
         { returnDocument: 'after' },
       );
+
     return result;
   }
 }

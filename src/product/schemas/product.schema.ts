@@ -15,7 +15,7 @@ export const ProductSchema = new mongoose.Schema(
     },
     category: { type: String, lowercase: true, trim: true },
     subCategory: { type: String, lowercase: true, trim: true, required: false },
-    subCategory2: {
+    sub2Category: {
       type: String,
       lowercase: true,
       trim: true,
