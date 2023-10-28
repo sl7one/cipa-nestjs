@@ -5,6 +5,7 @@ import { CreateProductDto } from './dto/product.dto';
 import { CreateCategoryDto } from '../category/dto/category.dto';
 import { CreateSubCategoryDto } from '../subCategory/dto/subCategory.dto';
 import { CreateSub2CategoryDto } from '../sub2Category/dto/sub2Category.dto';
+import { SortIndexBody } from './types/types';
 
 @Injectable()
 export class ProductService {
@@ -23,7 +24,7 @@ export class ProductService {
   ) {}
 
   async getProducts(): Promise<CreateProductDto[]> {
-    return await this.productModel.find({});
+    return await this.productModel.find({}).sort([['sortIndex', 'asc']]);
   }
 
   async updateProduct(
@@ -61,5 +62,20 @@ export class ProductService {
       );
 
     return result;
+  }
+
+  async updateSortIndex(body: SortIndexBody): Promise<CreateProductDto[]> {
+    const { less, more } = body;
+    const res1 = await this.productModel.findOneAndUpdate(
+      { _id: less.productId },
+      { sortIndex: more.sortIndex },
+      { returnDocument: 'after' },
+    );
+    const res2 = await this.productModel.findOneAndUpdate(
+      { _id: more.productId },
+      { sortIndex: less.sortIndex },
+      { returnDocument: 'after' },
+    );
+    return [res1, res2];
   }
 }

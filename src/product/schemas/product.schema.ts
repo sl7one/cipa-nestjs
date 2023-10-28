@@ -25,6 +25,7 @@ export const ProductSchema = new mongoose.Schema(
       type: Number,
       min: 0,
     },
+    sortIndex: { type: Number, default: 0, required: false },
   },
   { versionKey: false, timestamps: false },
 );

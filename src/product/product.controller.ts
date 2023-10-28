@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/product.dto';
+import { SortIndexBody } from './types/types';
 
 @Controller('products')
 export class ProductController {
@@ -17,5 +18,10 @@ export class ProductController {
     @Body() dto: CreateProductDto,
   ): Promise<CreateProductDto[]> {
     return this.productService.updateProduct(_id, dto);
+  }
+
+  @Put()
+  updateSortIndex(@Body() body: SortIndexBody) {
+    return this.productService.updateSortIndex(body);
   }
 }

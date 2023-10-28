@@ -46,4 +46,10 @@ export class CreateProductDto {
   })
   @IsOptional()
   price: number;
+
+  @ApiProperty({
+    description: 'sort index',
+  })
+  @IsOptional()
+  sortIndex: number;
 }
