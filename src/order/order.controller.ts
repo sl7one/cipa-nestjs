@@ -5,9 +5,10 @@ import {
   Param,
   Delete,
   Body,
-  Patch,
+  // Patch,
   HttpException,
   HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/order.dto';
@@ -23,6 +24,15 @@ export class OrderController {
 
   @Get(':id')
   getOrder(@Param('id') id: string) {
+    if (!id)
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: 'Empty parametrs',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     return this.orderService.getOrder(id);
   }
 
@@ -40,8 +50,8 @@ export class OrderController {
     return this.orderService.createOrder(dto);
   }
 
-  @Patch(':id')
-  updateOrder(@Param('id') id: string) {
+  @Put('salle/:id')
+  salleOrder(@Param('id') id: string) {
     if (!id)
       throw new HttpException(
         {
@@ -51,7 +61,7 @@ export class OrderController {
         },
         HttpStatus.BAD_REQUEST,
       );
-    return this.orderService.updateOrder(id);
+    return this.orderService.salleOrder(id);
   }
 
   @Delete(':id')
@@ -66,5 +76,19 @@ export class OrderController {
         HttpStatus.BAD_REQUEST,
       );
     return this.orderService.deleteOrder(id);
+  }
+
+  @Put('unsalle/:id')
+  unsalleOrder(@Param('id') id: string) {
+    if (!id)
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: 'Empty parametrs',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    return this.orderService.unsalleOrder(id);
   }
 }

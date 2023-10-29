@@ -90,7 +90,7 @@ export class OrderService {
     return { ...res, id: ids };
   }
 
-  async updateOrder(id: string) {
+  async salleOrder(id: string) {
     const ids = id.split(',').map((id) => id);
 
     const res = await this.orderModel.updateMany(
@@ -98,5 +98,14 @@ export class OrderService {
       { isActive: false },
     );
     return { ...res, id: ids };
+  }
+
+  async unsalleOrder(_id: string) {
+    const res = await this.orderModel.findByIdAndUpdate(
+      { _id },
+      { isActive: true },
+      { returnDocument: 'after' },
+    );
+    return res;
   }
 }
