@@ -10,7 +10,11 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     DatabaseModule,
-    JwtModule.register({ secret: jwtConstants.secret }),
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '3d' },
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService, ...authProviders],

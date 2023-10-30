@@ -5,7 +5,6 @@ import { CreateUserDto, LoginUserDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
-// import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -73,15 +72,22 @@ export class AuthService {
           {
             statusCode: HttpStatus.BAD_REQUEST,
             error: 'Auth error',
-            message: 'User not found',
+            message: 'Wrong password',
           },
           HttpStatus.BAD_REQUEST,
         );
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password: userPassword, ...rest } = user;
-      return rest;
+
+      const {
+        token: userToken,
+        phone: userPhone,
+        firstName,
+        role,
+      } = user as any;
+
+      return { token: userToken, phone: userPhone, firstName, role };
     } catch (error) {
       throw new HttpException(
         {
