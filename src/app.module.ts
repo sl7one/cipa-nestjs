@@ -6,7 +6,7 @@ import { ClientsModule } from './client/client.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './subCategory/subCategory.module';
 import { Sub2CategoryModule } from './sub2Category/sub2Category.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { UserModule } from './user/user.module';
     CategoryModule,
     SubCategoryModule,
     Sub2CategoryModule,
-    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

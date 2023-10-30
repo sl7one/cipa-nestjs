@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Connection } from 'mongoose';
-import { UserSchema } from './user.schema';
+import { AuthSchema } from './auth.schema';
 
-export const usersProviders = [
+export const authProviders = [
   {
-    provide: 'USER_MODEL',
+    provide: 'USERS_MODEL',
     useFactory: (connection: Connection) =>
-      connection.model('User', UserSchema),
+      connection.model('Users', AuthSchema),
     inject: ['DATABASE_CONNECTION'],
   },
 ];
