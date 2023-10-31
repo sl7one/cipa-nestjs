@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Connection } from 'mongoose';
 import { Sub2CategorySchema } from './sub2Category.schema';
 

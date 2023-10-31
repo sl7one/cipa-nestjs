@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import * as mongoose from 'mongoose';
 
 export const Sub2CategorySchema = new mongoose.Schema(

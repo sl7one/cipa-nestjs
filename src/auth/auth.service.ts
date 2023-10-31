@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateUserDto, LoginUserDto } from './dto/auth.dto';
@@ -16,7 +15,7 @@ export class AuthService {
 
   async signup(body: CreateUserDto): Promise<any> {
     try {
-      const [userFromDataBase] = await this.userModel.find({
+      const userFromDataBase = await this.userModel.findOne({
         phone: body.phone,
       });
 
@@ -42,13 +41,24 @@ export class AuthService {
 
       const token = await this.jwtService.signAsync(rest);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password: userPassword, ...newUser } =
-        await this.userModel.create({
-          ...rest,
-          token,
-          password: hashedPassword,
-        });
-      return newUser;
+      const newUser = await this.userModel.create({
+        ...rest,
+        token,
+        password: hashedPassword,
+      });
+
+      const {
+        firstName: newUserName,
+        phone: newUserPhone,
+        token: newUserToken,
+        role: newUserRole,
+      } = newUser as any;
+      return {
+        firstName: newUserName,
+        phone: newUserPhone,
+        token: newUserToken,
+        role: newUserRole,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -63,8 +73,8 @@ export class AuthService {
 
   async login(body: LoginUserDto) {
     try {
-      const { phone, password } = body;
-      const [user] = await this.userModel.find({ phone });
+      const { phone, password, ...rest } = body;
+      const user = await this.userModel.findOne({ phone });
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
@@ -78,16 +88,26 @@ export class AuthService {
         );
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const newToken = await this.jwtService.signAsync({ phone, ...rest });
+      const updatedUser = await this.userModel.findOneAndUpdate(
+        { phone },
+        { token: newToken },
+        { returnDocument: 'after' },
+      );
 
       const {
-        token: userToken,
-        phone: userPhone,
-        firstName,
+        token: updatedUserToken,
+        firstName: updatedUserName,
+        phone: updatedUserPhone,
         role,
-      } = user as any;
+      } = updatedUser as any;
 
-      return { token: userToken, phone: userPhone, firstName, role };
+      return {
+        token: updatedUserToken,
+        phone: updatedUserPhone,
+        firstName: updatedUserName,
+        role,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -96,6 +116,54 @@ export class AuthService {
           message: 'Credentials are incorrect',
         },
         HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async current(token: { token: string }) {
+    try {
+      const user = await this.userModel.findOne(token);
+      if (!user) {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.BAD_REQUEST,
+            error: 'Auth error',
+            message: 'User not found',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const { _id, token: userToken, firstName, phone, role } = user as any;
+
+      return { _id, token: userToken, firstName, phone, role };
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: error.statusCode,
+          error: error.error,
+          message: error.message,
+        },
+        error.statusCode,
+      );
+    }
+  }
+
+  async logout(userId: string) {
+    try {
+      await this.userModel.findOneAndUpdate({ _id: userId }, { token: '' });
+
+      return {
+        message: 'Logged out',
+      };
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: error.statusCode,
+          error: error.error,
+          message: error.message,
+        },
+        error.statusCode,
       );
     }
   }

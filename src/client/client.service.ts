@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateClientDto } from './dto/client.dto';
