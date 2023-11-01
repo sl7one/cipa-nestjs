@@ -49,10 +49,10 @@ export class OrderService {
         price: order.find((item) => item._id.toString() === _id.toString())
           .price,
         quantity: order.find((item) => item._id.toString() === _id.toString())
-          .order,
+          .quantity,
         total:
-          order.find((item) => item._id.toString() === _id.toString()).order *
-          order.find((item) => item._id.toString() === _id.toString()).price,
+          order.find((item) => item._id.toString() === _id.toString()).price *
+          order.find((item) => item._id.toString() === _id.toString()).quantity,
       };
     });
 

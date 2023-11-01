@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose';
 
 const fullOrder = new mongoose.Schema({
-  title: { type: String, minlength: 3 },
+  title: { type: String },
   img: { type: String },
-  category: { type: String, minlength: 3 },
-  subCategory: { type: String, minlength: 3, required: false },
-  subCategory2: { type: String, minlength: 3, required: false },
+  category: { type: String },
+  subCategory: { type: String, required: false },
+  subCategory2: { type: String, required: false },
 
   price: { type: Number, min: 0 },
   quantity: { type: Number, min: 0 },

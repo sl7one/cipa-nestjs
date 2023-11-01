@@ -24,7 +24,7 @@ class OrderDto {
 
   @Min(0)
   @IsInt()
-  order: number;
+  quantity: number;
 }
 
 export class CreateOrderDto {
