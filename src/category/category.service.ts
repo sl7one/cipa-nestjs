@@ -10,7 +10,7 @@ export class CategoryService {
   ) {}
 
   async getCategories(): Promise<CreateCategoryDto[]> {
-    return await this.categoriesModel.find({});
+    return await this.categoriesModel.find({}).lean();
   }
 
   async addNewCategory(body: CreateCategoryDto) {

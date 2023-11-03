@@ -10,7 +10,7 @@ export class ClientService {
   ) {}
 
   async getClients(): Promise<CreateClientDto[]> {
-    return await this.orderModel.find({}).sort({ date: -1 });
+    return await this.orderModel.find({}).lean().sort({ date: -1 });
   }
 
   async createClient(client: CreateClientDto) {

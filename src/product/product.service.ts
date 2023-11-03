@@ -23,7 +23,10 @@ export class ProductService {
   ) {}
 
   async getProducts(): Promise<CreateProductDto[]> {
-    return await this.productModel.find({}).sort([['sortIndex', 'asc']]);
+    return await this.productModel
+      .find({})
+      .lean()
+      .sort([['sortIndex', 'asc']]);
   }
 
   async updateProduct(
@@ -33,25 +36,27 @@ export class ProductService {
     const { category, subCategory = null, sub2Category = null, ...rest } = body;
 
     const categories = { category: '', subCategory: '', sub2Category: '' };
-    const [categoryData] = await this.categoryModel.find({ _id: category });
+    const categoryData = await this.categoryModel
+      .findOne({ _id: category })
+      .lean();
     if (!categoryData) {
       throw new HttpException('Категория не найдена', HttpStatus.NOT_FOUND);
     }
     categories.category = categoryData.name;
-
-    if (subCategory) {
-      const [subCategoryData] = await this.subCategoryModel.find({
-        _id: subCategory,
-      });
-      categories.subCategory = subCategoryData.name;
-    }
-
-    if (sub2Category) {
-      const [sub2CategoryData] = await this.sub2CategoryModel.find({
-        _id: sub2Category,
-      });
-      categories.sub2Category = sub2CategoryData.name;
-    }
+    categories.subCategory = subCategory
+      ? await this.subCategoryModel
+          .findOne({
+            _id: subCategory,
+          })
+          .lean()
+      : '';
+    categories.sub2Category = sub2Category
+      ? await this.sub2CategoryModel
+          .findOne({
+            _id: sub2Category,
+          })
+          .lean()
+      : '';
 
     const result: CreateProductDto[] =
       await this.productModel.findByIdAndUpdate(

@@ -10,7 +10,7 @@ export class SubCategoryService {
   ) {}
 
   async getSubCategory(): Promise<CreateSubCategoryDto[]> {
-    return await this.subCategoryModel.find({});
+    return await this.subCategoryModel.find({}).lean();
   }
 
   async addNewSubCategory(body: CreateSubCategoryDto) {

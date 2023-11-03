@@ -10,7 +10,7 @@ export class LocationService {
   ) {}
 
   async getLocations(): Promise<CreateLocationDto[]> {
-    return await this.locationModel.find({});
+    return await this.locationModel.find({}).lean();
   }
 
   async addNewLocation(body: CreateLocationDto) {

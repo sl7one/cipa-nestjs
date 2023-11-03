@@ -66,7 +66,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'location ID',
   })
-  @IsMongoId()
   @IsOptional()
   location: mongoose.Schema.Types.ObjectId;
 

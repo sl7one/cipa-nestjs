@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/order.dto';
@@ -62,6 +63,20 @@ export class OrderController {
         HttpStatus.BAD_REQUEST,
       );
     return this.orderService.salleOrder(id);
+  }
+
+  @Patch(':id')
+  updateOrder(@Param('id') id: string, @Body() dto: CreateOrderDto) {
+    if (!id || !Object.entries(dto).length)
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          error: 'Bad Request',
+          message: 'Empty parametrs',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    return this.orderService.updateOrder(id, dto);
   }
 
   @Delete(':id')

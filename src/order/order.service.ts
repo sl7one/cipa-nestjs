@@ -22,11 +22,11 @@ export class OrderService {
   ) {}
 
   async getOrders(): Promise<CreateOrderDto[]> {
-    return await this.orderModel.find({}).sort({ date: -1 });
+    return await this.orderModel.find({}).lean().sort({ date: -1 });
   }
 
-  async getOrder(id: string): Promise<CreateOrderDto[]> {
-    return await this.orderModel.find({ _id: id });
+  async getOrder(_id: string): Promise<CreateOrderDto[]> {
+    return await this.orderModel.find({ _id }).lean();
   }
 
   async createOrder(obj: CreateOrderDto) {
@@ -34,9 +34,11 @@ export class OrderService {
 
     const productsIds = order.map(({ _id }) => _id);
 
-    const productsArr = await this.productModel.find({
-      _id: { $in: productsIds },
-    });
+    const productsArr = await this.productModel
+      .find({
+        _id: { $in: productsIds },
+      })
+      .lean();
 
     if (!productsArr) {
       throw new HttpException('Продукты не найдены', HttpStatus.NOT_FOUND);
@@ -61,22 +63,23 @@ export class OrderService {
       0,
     );
 
-    const clientArr = await this.clientModel.find({ _id: client_id });
-    if (!clientArr || !clientArr.length) {
+    const client = await this.clientModel.findOne({ _id: client_id });
+    if (!client) {
       throw new HttpException('Клиент не найден', HttpStatus.NOT_FOUND);
     }
-    const [clientData] = clientArr;
 
-    const [location] = await this.locationModel.find({
-      _id: location_id,
-    });
+    const location = location_id
+      ? await this.locationModel.findOne({
+          _id: location_id,
+        })
+      : '';
 
     const res = await this.orderModel.create({
       ...rest,
-      order: ordersArray,
       total: totalByOrdersArr,
-      client: clientData,
-      location: location ? location.location : '',
+      order: ordersArray,
+      client,
+      location,
     });
 
     return res;
@@ -87,6 +90,68 @@ export class OrderService {
 
     const res = await this.orderModel.deleteMany({ _id: { $in: ids } });
     return { ...res, id: ids };
+  }
+
+  async updateOrder(_id: string, payload: CreateOrderDto) {
+    const {
+      order,
+      client: client_id,
+      location: location_id,
+      ...rest
+    } = payload;
+
+    const productsIds = order.map(({ _id }) => _id);
+    const productsArr = await this.productModel
+      .find({
+        _id: { $in: productsIds },
+      })
+      .lean();
+
+    if (!productsArr) {
+      throw new HttpException('Продукты не найдены', HttpStatus.NOT_FOUND);
+    }
+    const ordersArray = productsArr.map(({ _id, ...rest }) => {
+      return {
+        _id,
+        ...rest,
+        price: order.find((item) => item._id.toString() === _id.toString())
+          .price,
+        quantity: order.find((item) => item._id.toString() === _id.toString())
+          .quantity,
+        total:
+          order.find((item) => item._id.toString() === _id.toString()).price *
+          order.find((item) => item._id.toString() === _id.toString()).quantity,
+      };
+    });
+    const totalByOrdersArr = ordersArray.reduce(
+      (acc, { total }) => (acc += total),
+      0,
+    );
+
+    const client = await this.clientModel.findOne({ _id: client_id });
+    if (!client) {
+      throw new HttpException('Клиент не найден', HttpStatus.NOT_FOUND);
+    }
+
+    const location = location_id
+      ? await this.locationModel.findOne({
+          _id: location_id,
+        })
+      : '';
+    const res = await this.orderModel.findByIdAndUpdate(
+      { _id },
+      {
+        order: ordersArray,
+        client,
+        location: location ? location.location : '',
+        total: totalByOrdersArr,
+        ...rest,
+      },
+      {
+        returnDocument: 'after',
+      },
+    );
+    return res;
   }
 
   async salleOrder(id: string) {
