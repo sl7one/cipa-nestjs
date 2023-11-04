@@ -74,7 +74,7 @@ export class AuthService {
   async login(body: LoginUserDto) {
     try {
       const { phone, password, ...rest } = body;
-      const user = await this.userModel.findOne({ phone });
+      const user = await this.userModel.findOne({ phone }).lean();
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
@@ -89,25 +89,11 @@ export class AuthService {
       }
 
       const newToken = await this.jwtService.signAsync({ phone, ...rest });
-      const updatedUser = await this.userModel.findOneAndUpdate(
+      return await this.userModel.findOneAndUpdate(
         { phone },
         { token: newToken },
         { returnDocument: 'after' },
       );
-
-      const {
-        token: updatedUserToken,
-        firstName: updatedUserName,
-        phone: updatedUserPhone,
-        role,
-      } = updatedUser as any;
-
-      return {
-        token: updatedUserToken,
-        phone: updatedUserPhone,
-        firstName: updatedUserName,
-        role,
-      };
     } catch (error) {
       throw new HttpException(
         {

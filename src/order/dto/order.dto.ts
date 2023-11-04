@@ -51,12 +51,6 @@ export class CreateOrderDto {
   order: OrderDto[];
 
   @ApiProperty({
-    description: 'user ID',
-  })
-  @IsMongoId()
-  owner: mongoose.Schema.Types.ObjectId;
-
-  @ApiProperty({
     description: 'optional',
   })
   @IsBoolean()

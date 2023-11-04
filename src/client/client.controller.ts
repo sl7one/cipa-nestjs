@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateClientDto } from './dto/client.dto';
 import { ClientService } from './client.service';
+import { ParseObjectIdPipe } from 'src/pipes/objectId-pasre.pipe';
 
 @Controller('clients')
 export class ClientController {
@@ -41,7 +42,10 @@ export class ClientController {
   }
 
   @Delete(':id')
-  deleteClient(@Param('id') id: string) {
+  deleteClient(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
     return this.clientService.deleteClient(id);
   }
 }

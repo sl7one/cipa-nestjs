@@ -38,7 +38,11 @@ export const OrderSchema = new mongoose.Schema(
       },
     },
 
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true,
+    },
     order: {
       type: [fullOrder],
       minlength: 1,

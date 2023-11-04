@@ -15,6 +15,8 @@ import { SubCategoryService } from 'src/subCategory/subCategory.service';
 import { subCategoryProviders } from 'src/subCategory/schemas/subCategory.providers';
 import { Sub2CategoryService } from 'src/sub2Category/sub2Category.service';
 import { sub2CategoryProviders } from 'src/sub2Category/schemas/sub2Category.providers';
+import { authProviders } from 'src/auth/schemas/auth.providers';
+import { AuthService } from 'src/auth/auth.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -34,6 +36,8 @@ import { sub2CategoryProviders } from 'src/sub2Category/schemas/sub2Category.pro
     ...subCategoryProviders,
     Sub2CategoryService,
     ...sub2CategoryProviders,
+    AuthService,
+    ...authProviders,
   ],
 })
 export class OrdersModule {}

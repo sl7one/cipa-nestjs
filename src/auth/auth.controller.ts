@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto/auth.dto';
+import { ParseObjectIdPipe } from 'src/pipes/objectId-pasre.pipe';
 
 @Controller('auth')
 export class AuthController {
@@ -57,16 +58,19 @@ export class AuthController {
   }
 
   @Put('logout/:id')
-  logout(@Param('id') id: string) {
-    if (!id)
-      throw new HttpException(
-        {
-          statusCode: HttpStatus.BAD_REQUEST,
-          error: 'Bad Request',
-          message: 'Empty user id',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+  logout(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
+    // if (!id)
+    //   throw new HttpException(
+    //     {
+    //       statusCode: HttpStatus.BAD_REQUEST,
+    //       error: 'Bad Request',
+    //       message: 'Empty user id',
+    //     },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
     return this.userService.logout(id);
   }
 }

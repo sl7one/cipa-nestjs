@@ -5,14 +5,15 @@ import {
   Param,
   Delete,
   Body,
-  // Patch,
   HttpException,
   HttpStatus,
   Put,
   Patch,
+  Headers,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/order.dto';
+import { ParseObjectIdPipe } from 'src/pipes/objectId-pasre.pipe';
 
 @Controller('orders')
 export class OrderController {
@@ -24,7 +25,10 @@ export class OrderController {
   }
 
   @Get(':id')
-  getOrder(@Param('id') id: string) {
+  getOrder(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
     if (!id)
       throw new HttpException(
         {
@@ -38,7 +42,12 @@ export class OrderController {
   }
 
   @Post()
-  createOrder(@Body() dto: CreateOrderDto) {
+  createOrder(
+    @Headers('authorization') authorization: string,
+    @Body() dto: CreateOrderDto,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, token]: string[] = authorization.split(' ');
     if (!Object.entries(dto).length)
       throw new HttpException(
         {
@@ -48,11 +57,14 @@ export class OrderController {
         },
         HttpStatus.BAD_REQUEST,
       );
-    return this.orderService.createOrder(dto);
+    return this.orderService.createOrder(dto, token);
   }
 
   @Put('salle/:id')
-  salleOrder(@Param('id') id: string) {
+  salleOrder(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
     if (!id)
       throw new HttpException(
         {
@@ -66,7 +78,11 @@ export class OrderController {
   }
 
   @Patch(':id')
-  updateOrder(@Param('id') id: string, @Body() dto: CreateOrderDto) {
+  updateOrder(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+    @Body() dto: CreateOrderDto,
+  ) {
     if (!id || !Object.entries(dto).length)
       throw new HttpException(
         {
@@ -80,7 +96,10 @@ export class OrderController {
   }
 
   @Delete(':id')
-  deleteOrder(@Param('id') id: string) {
+  deleteOrder(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
     if (!id)
       throw new HttpException(
         {
@@ -94,7 +113,10 @@ export class OrderController {
   }
 
   @Put('unsalle/:id')
-  unsalleOrder(@Param('id') id: string) {
+  unsalleOrder(
+    @Param('id', ParseObjectIdPipe)
+    id: string,
+  ) {
     if (!id)
       throw new HttpException(
         {

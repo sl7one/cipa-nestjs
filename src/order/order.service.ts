@@ -19,6 +19,9 @@ export class OrderService {
 
     @Inject('LOCATION_MODEL')
     private locationModel: Model<CreateLocationDto>,
+
+    @Inject('USERS_MODEL')
+    private userModel: Model<CreateLocationDto>,
   ) {}
 
   async getOrders(): Promise<CreateOrderDto[]> {
@@ -29,8 +32,8 @@ export class OrderService {
     return await this.orderModel.find({ _id }).lean();
   }
 
-  async createOrder(obj: CreateOrderDto) {
-    const { order, client: client_id, location: location_id, ...rest } = obj;
+  async createOrder(body: CreateOrderDto, token: string) {
+    const { order, client: client_id, location: location_id, ...rest } = body;
 
     const productsIds = order.map(({ _id }) => _id);
 
@@ -74,12 +77,15 @@ export class OrderService {
         })
       : '';
 
+    const owner = await this.userModel.findOne({ token }).lean();
+
     const res = await this.orderModel.create({
       ...rest,
       total: totalByOrdersArr,
       order: ordersArray,
       client,
       location,
+      owner,
     });
 
     return res;
