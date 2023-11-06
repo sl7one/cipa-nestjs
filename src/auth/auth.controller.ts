@@ -62,15 +62,6 @@ export class AuthController {
     @Param('id', ParseObjectIdPipe)
     id: string,
   ) {
-    // if (!id)
-    //   throw new HttpException(
-    //     {
-    //       statusCode: HttpStatus.BAD_REQUEST,
-    //       error: 'Bad Request',
-    //       message: 'Empty user id',
-    //     },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
     return this.userService.logout(id);
   }
 }

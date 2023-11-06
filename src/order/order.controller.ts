@@ -62,7 +62,7 @@ export class OrderController {
 
   @Put('salle/:id')
   salleOrder(
-    @Param('id', ParseObjectIdPipe)
+    @Param('id')
     id: string,
   ) {
     if (!id)
@@ -97,7 +97,7 @@ export class OrderController {
 
   @Delete(':id')
   deleteOrder(
-    @Param('id', ParseObjectIdPipe)
+    @Param('id')
     id: string,
   ) {
     if (!id)

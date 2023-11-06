@@ -66,15 +66,17 @@ export class OrderService {
       0,
     );
 
-    const client = await this.clientModel.findOne({ _id: client_id });
+    const client = await this.clientModel.findOne({ _id: client_id }).lean();
     if (!client) {
       throw new HttpException('Клиент не найден', HttpStatus.NOT_FOUND);
     }
 
     const location = location_id
-      ? await this.locationModel.findOne({
-          _id: location_id,
-        })
+      ? await this.locationModel
+          .findOne({
+            _id: location_id,
+          })
+          .lean()
       : '';
 
     const owner = await this.userModel.findOne({ token }).lean();

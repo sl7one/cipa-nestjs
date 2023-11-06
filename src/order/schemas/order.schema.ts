@@ -54,8 +54,10 @@ export const OrderSchema = new mongoose.Schema(
     },
 
     location: {
-      type: String,
-      required: false,
+      location: {
+        type: String,
+        required: false,
+      },
     },
 
     message: {
