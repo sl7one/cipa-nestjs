@@ -74,7 +74,17 @@ export class AuthService {
   async login(body: LoginUserDto) {
     try {
       const { phone, password, ...rest } = body;
-      const user = await this.userModel.findOne({ phone }).lean();
+      const user = await this.userModel.findOne({ phone });
+      if (!user) {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.BAD_REQUEST,
+            error: 'Auth error',
+            message: 'User is not exist',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
@@ -97,9 +107,9 @@ export class AuthService {
     } catch (error) {
       throw new HttpException(
         {
-          statusCode: HttpStatus.BAD_REQUEST,
-          error: 'Auth error',
-          message: 'Credentials are incorrect',
+          statusCode: error.statusCode,
+          error: error.error,
+          message: error.message,
         },
         HttpStatus.BAD_REQUEST,
       );
