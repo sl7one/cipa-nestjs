@@ -21,6 +21,7 @@ import { SubCategoryController } from './subCategory/subCategory.controller';
 import { Sub2CategoryController } from './sub2Category/sub2Category.controller';
 import { AuthController } from './auth/auth.controller';
 import { verifyToken } from './auth/verifyToken';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -32,6 +33,9 @@ import { verifyToken } from './auth/verifyToken';
     SubCategoryModule,
     Sub2CategoryModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
 })
 export class AppModule implements NestModule {
