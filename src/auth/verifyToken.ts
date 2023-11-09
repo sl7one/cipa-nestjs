@@ -20,13 +20,13 @@ export async function verifyToken(req: Request, _, next: NextFunction) {
     try {
       await jwtService.verifyAsync(token, jwtConstants);
     } catch (error) {
-      console.log('error verifying token');
-
-      throw new UnauthorizedException({
-        message: 'Invalid bearer token',
-        error: 'Unauthorized',
-        statusCode: 401,
-      });
+      return next(
+        new UnauthorizedException({
+          message: 'Invalid bearer token',
+          error: 'Unauthorized',
+          statusCode: 401,
+        }),
+      );
     }
     next();
     return;

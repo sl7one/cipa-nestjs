@@ -131,8 +131,15 @@ export class AuthService {
       }
 
       return user;
-    } catch (error) {
-      return error;
+    } catch ({ response: { statusCode, error, message } }) {
+      throw new HttpException(
+        {
+          statusCode,
+          error,
+          message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
