@@ -118,7 +118,7 @@ export class AuthService {
 
   async current(token: { token: string }) {
     try {
-      const user = await this.userModel.findOne(token);
+      const user = await this.userModel.findOne(token).lean();
       if (!user) {
         throw new HttpException(
           {
@@ -130,18 +130,9 @@ export class AuthService {
         );
       }
 
-      const { _id, token: userToken, firstName, phone, role } = user as any;
-
-      return { _id, token: userToken, firstName, phone, role };
+      return user;
     } catch (error) {
-      throw new HttpException(
-        {
-          statusCode: error.statusCode,
-          error: error.error,
-          message: error.message,
-        },
-        error.statusCode,
-      );
+      return error;
     }
   }
 
