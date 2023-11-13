@@ -22,10 +22,13 @@ import { Sub2CategoryController } from './sub2Category/sub2Category.controller';
 import { AuthController } from './auth/auth.controller';
 import { verifyToken } from './auth/verifyToken';
 import { ConfigModule } from '@nestjs/config';
+import { PurchaseController } from './purchase/purchase.controller';
+import { PurchasesModule } from './purchase/purchase.module';
 
 @Module({
   imports: [
     OrdersModule,
+    PurchasesModule,
     ProductsModule,
     LocationModule,
     ClientsModule,
@@ -48,6 +51,7 @@ export class AppModule implements NestModule {
       )
       .forRoutes(
         OrderController,
+        PurchaseController,
         ProductController,
         LocationController,
         ClientController,
